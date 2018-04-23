@@ -1,3 +1,12 @@
+/*
+Author: David Trujillo
+Description: BT Module for IOT
+Web: https://github.com/david-trujillo/android-bluetooth-low-energy
+
+gradlew install
+gradlew bintrayUpload
+ */
+
 package trujillo.david.bluetoothle;
 
 
@@ -7,6 +16,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Handler;
 import android.os.IBinder;
 
 import trujillo.david.bluetoothle.exceptions.BleException;
@@ -25,6 +35,8 @@ public class Bluetooth {
     private static final String UUID_READ = "00002902-0000-1000-8000-00805f9b34fb";
     private static final String UUID_WRITE = "0000fff6-0000-1000-8000-00805f9b34fb";
     private static final String UUID_SERVICE = "0000fff0-0000-1000-8000-00805f9b34fb";
+
+    public int delayConnection = 250;
 
     private BluetoothService bluetoothService;
 
@@ -46,6 +58,10 @@ public class Bluetooth {
 
     public void setReaderManager(ReaderManager readerManager) {
         this.readerManager = readerManager;
+    }
+
+    public void setDelayConnection(int delayConnection) {
+        this.delayConnection = delayConnection;
     }
 
     public void setBluetoothService(BluetoothService bluetoothService) {
@@ -249,7 +265,17 @@ public class Bluetooth {
         public void onServicesDiscovered() {
             notifyData();
             if (connectCallback != null) {
-                connectCallback.onConnected();
+                if (delayConnection > 0) {
+                    Handler handler = new Handler();
+                    Runnable runnable = new Runnable() {
+                        public void run() {
+                            connectCallback.onConnected();
+                        }
+                    };
+                    handler.postDelayed(runnable, delayConnection);
+                } else {
+                    connectCallback.onConnected();
+                }
             }
         }
     };
