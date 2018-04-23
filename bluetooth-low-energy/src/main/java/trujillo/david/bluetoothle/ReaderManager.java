@@ -29,4 +29,7 @@ public class ReaderManager {
         });
     }
 
+    public Bluetooth getBluetooth() {
+        return bluetooth;
+    }
 }

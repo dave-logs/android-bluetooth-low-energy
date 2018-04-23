@@ -29,12 +29,12 @@ public class BleConnector {
     private static final String UUID_CLIENT_CHARACTERISTIC_CONFIG_DESCRIPTOR = "00002902-0000-1000-8000-00805f9b34fb";
 
     private static final int MSG_WRITE_CHA = 1;
-    private static final int MSG_WRIATE_DES = 2;
+    private static final int MSG_WRITE_DES = 2;
     private static final int MSG_READ_CHA = 3;
     private static final int MSG_READ_DES = 4;
     private static final int MSG_READ_RSSI = 5;
     private static final int MSG_NOTIFY_CHA = 6;
-    private static final int MSG_NOTIY_DES = 7;
+    private static final int MSG_NOTIFY_DES = 7;
     private static final int MSG_INDICATE_DES = 8;
 
     private BluetoothGatt bluetoothGatt;

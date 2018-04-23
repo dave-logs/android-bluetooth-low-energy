@@ -27,8 +27,6 @@ public class BluetoothService extends Service {
     private BleManager bleManager;
     private Handler threadHandler = new Handler(Looper.getMainLooper());
     private Callback mCallback = null;
-    private Callback2 mCallback2 = null;
-    private ConnectCallback connectCallback2 = null;
 
     private static long TIME_OUT = 5000;
 
@@ -49,7 +47,6 @@ public class BluetoothService extends Service {
         super.onDestroy();
         bleManager = null;
         mCallback = null;
-        mCallback2 = null;
     }
 
     @Override
@@ -73,10 +70,6 @@ public class BluetoothService extends Service {
         mCallback = callback;
     }
 
-    public void setConnectCallback(Callback2 callback) {
-        mCallback2 = callback;
-    }
-
     public void setTimeOut(long timeOut) {
         TIME_OUT = timeOut;
     }
@@ -96,11 +89,6 @@ public class BluetoothService extends Service {
         void onDisConnected();
 
         void onServicesDiscovered();
-    }
-
-    public interface Callback2 {
-
-        void onDisConnected();
     }
 
     public void scanDevice() {
@@ -147,7 +135,6 @@ public class BluetoothService extends Service {
 
     public void scanAndConnectDevice(String name, boolean autoConnect, ConnectCallback connectCallback) {
         resetInfo();
-        this.connectCallback2 = connectCallback;
 
         if (mCallback != null) {
             mCallback.onStartScan();
@@ -208,10 +195,6 @@ public class BluetoothService extends Service {
                     if (mCallback != null) {
                         mCallback.onConnectFail();
                     }
-
-                    if (connectCallback2 != null) {
-                        connectCallback2.onConnectFail();
-                    }
                 }
             });
         }
@@ -250,9 +233,6 @@ public class BluetoothService extends Service {
                     if (mCallback != null) {
                         mCallback.onConnectFail();
                         mCallback.onDisConnected();
-                    }
-                    if (mCallback2 != null) {
-                        mCallback2.onDisConnected();
                     }
                 }
             });
@@ -305,9 +285,6 @@ public class BluetoothService extends Service {
                         mCallback.onConnectFail();
                         mCallback.onDisConnected();
                     }
-                    if (mCallback2 != null) {
-                        mCallback2.onDisConnected();
-                    }
                 }
             });
         }
@@ -347,10 +324,6 @@ public class BluetoothService extends Service {
         }
         if (mCallback != null) {
             mCallback.onDisConnected();
-        }
-
-        if (mCallback2 != null) {
-            mCallback2.onDisConnected();
         }
     }
 
