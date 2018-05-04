@@ -1,4 +1,18 @@
 /*
+Copyright 2018 David Trujillo
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
 Author: David Trujillo
 Description: BT Module for IOT
 Web: https://github.com/david-trujillo/android-bluetooth-low-energy
@@ -42,6 +56,7 @@ public class Bluetooth {
 
     private ScanCallback scanResults;
     private ConnectCallback connectCallback;
+    private ServiceCallback externalServiceCallback;
 
     private Application application;
     private ReaderManager readerManager;
@@ -72,6 +87,10 @@ public class Bluetooth {
         if (bluetoothService != null) {
             bluetoothService.scanDevice();
         }
+    }
+
+    public void setServiceCallback(ServiceCallback externalServiceCallback) {
+        this.externalServiceCallback = externalServiceCallback;
     }
 
     public void stopScan() {
@@ -132,10 +151,16 @@ public class Bluetooth {
         @Override
         public void onConnected() {
             setConnectCallback(connectCallback);
+            if (externalServiceCallback != null) {
+                externalServiceCallback.onConnected();
+            }
         }
 
         @Override
         public void onDisConnected() {
+            if (externalServiceCallback != null) {
+                externalServiceCallback.onDisConnected();
+            }
         }
     };
 

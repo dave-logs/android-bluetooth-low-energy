@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 
 ext {
-    bintrayRepo = 'bluetooth-low-energy'
+    bintrayRepo = 'android'
     bintrayName = 'bluetooth-low-energy'
 
     publishedGroupId = 'david.trujillo.utils'
@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/david-trujillo/android-bluetooth-low-energy'
     gitUrl = 'https://github.com/david-trujillo/android-bluetooth-low-energy.git'
 
-    libraryVersion = '1.0.2'
+    libraryVersion = '1.0.26'
 
     developerId = 'david-trujillo'
     developerName = 'David Trujillo'
@@ -44,7 +44,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.support:appcompat-v7:27.1.1'
+
 }
 
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
