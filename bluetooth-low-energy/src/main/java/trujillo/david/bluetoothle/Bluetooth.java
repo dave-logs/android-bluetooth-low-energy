@@ -25,6 +25,7 @@ package trujillo.david.bluetoothle;
 
 
 import android.app.Application;
+import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.ComponentName;
 import android.content.Context;
@@ -61,7 +62,7 @@ public class Bluetooth {
     private Application application;
     private ReaderManager readerManager;
 
-    
+
     public Bluetooth(Application application, Boolean disconnect) {
         this.application = application;
 
@@ -124,6 +125,10 @@ public class Bluetooth {
 
     public BluetoothService getBluetoothService() {
         return bluetoothService;
+    }
+
+    public BluetoothGatt getBluetoothGatt() {
+        return bluetoothService.getGatt();
     }
 
     public void connect(ScanResult scanResult, Boolean cancel, Boolean autoConnect) {
