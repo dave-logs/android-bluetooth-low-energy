@@ -61,10 +61,13 @@ public class Bluetooth {
     private Application application;
     private ReaderManager readerManager;
 
-    public Bluetooth(Application application) {
+    
+    public Bluetooth(Application application, Boolean disconnect) {
         this.application = application;
 
-        disconnect();
+        if (disconnect) {
+            disconnect();
+        }
 
         if (bluetoothService == null) {
             bindService();
@@ -228,7 +231,6 @@ public class Bluetooth {
             bluetoothService = ((BluetoothService.BluetoothBinder) service).getService();
             bluetoothService.setScanCallback(callback);
             if (serviceCallback != null) {
-                enableBluetooth();
                 serviceCallback.onConnected();
                 notifyData();
             }

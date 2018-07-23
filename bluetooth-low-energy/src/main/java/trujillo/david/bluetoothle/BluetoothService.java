@@ -351,6 +351,10 @@ public class BluetoothService extends Service {
         return gatt;
     }
 
+    public BleManager getBluetoothManager() {
+        return bleManager;
+    }
+
     public BluetoothAdapter getAdapter() {
         return bleManager.getAdapter();
     }
