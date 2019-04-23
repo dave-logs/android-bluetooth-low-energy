@@ -49,10 +49,10 @@ import trujillo.david.bluetoothle.utils.HexUtil;
 
 public class Bluetooth {
 
-    private static final String UUID_NOTIFY = "0000fff7-0000-1000-8000-00805f9b34fb";
-    private static final String UUID_READ = "00002902-0000-1000-8000-00805f9b34fb";
-    private static final String UUID_WRITE = "0000fff6-0000-1000-8000-00805f9b34fb";
-    private static final String UUID_SERVICE = "0000fff0-0000-1000-8000-00805f9b34fb";
+    private String uuidNotify = "0000fff7-0000-1000-8000-00805f9b34fb";
+    private String uuidRead = "00002902-0000-1000-8000-00805f9b34fb";
+    private String uuidWrite = "0000fff6-0000-1000-8000-00805f9b34fb";
+    private String uuidService = "0000fff0-0000-1000-8000-00805f9b34fb";
 
     public int delayConnection = 250;
 
@@ -64,7 +64,6 @@ public class Bluetooth {
 
     private Application application;
     private ReaderManager readerManager;
-
 
     public Bluetooth(Application application, Boolean disconnect) {
         this.application = application;
@@ -80,6 +79,29 @@ public class Bluetooth {
 
     public void setReaderManager(ReaderManager readerManager) {
         this.readerManager = readerManager;
+    }
+
+    public void setUuid(String uuidNotify, String uuidRead, String uuidService, String uuidWrite){
+        this.uuidNotify = uuidNotify;
+        this.uuidRead = uuidRead;
+        this.uuidService = uuidService;
+        this.uuidWrite = uuidWrite;
+    }
+
+    public void setUuidNotify(String uuidNotify) {
+        this.uuidNotify = uuidNotify;
+    }
+
+    public void setUuidRead(String uuidRead) {
+        this.uuidRead = uuidRead;
+    }
+
+    public void setUuidService(String uuidService) {
+        this.uuidService = uuidService;
+    }
+
+    public void setUuidWrite(String uuidWrite) {
+        this.uuidWrite = uuidWrite;
     }
 
     public void setDelayConnection(int delayConnection) {
@@ -211,14 +233,14 @@ public class Bluetooth {
         };
 
         if (!hex.isEmpty()) {
-            bluetoothService.write(UUID_SERVICE, UUID_WRITE, hex, bleCharacterCallback);
+            bluetoothService.write(uuidService, uuidWrite, hex, bleCharacterCallback);
         }
     }
 
     private void notifyData() {
         bluetoothService.notify(
-                UUID_SERVICE,
-                UUID_NOTIFY,
+                uuidService,
+                uuidNotify,
                 new BleCharacterCallback() {
                     @Override
                     public void onFailure(final BleException exception) {
