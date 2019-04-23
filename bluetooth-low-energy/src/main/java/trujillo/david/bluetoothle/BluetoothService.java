@@ -167,7 +167,7 @@ public class BluetoothService extends Service {
         boolean b = bleManager.scanMacAndConnect(mac, TIME_OUT, true, bleGattCallbackByName);
     }
 
-    public void cancelScan() {
+    public void stopScan() {
         if (bleManager != null) {
             bleManager.cancelScan();
         }

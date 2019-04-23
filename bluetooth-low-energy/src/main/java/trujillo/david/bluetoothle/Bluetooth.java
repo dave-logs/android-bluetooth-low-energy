@@ -25,6 +25,7 @@ package trujillo.david.bluetoothle;
 
 
 import android.app.Application;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.ComponentName;
@@ -33,6 +34,8 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.IBinder;
+
+import java.util.List;
 
 import trujillo.david.bluetoothle.exceptions.BleException;
 import trujillo.david.bluetoothle.interfaces.BleCharacterCallback;
@@ -98,10 +101,8 @@ public class Bluetooth {
     }
 
     public void stopScan() {
-        try {
-            bluetoothService.cancelScan();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (bluetoothService != null) {
+            bluetoothService.stopScan();
         }
     }
 
@@ -127,8 +128,15 @@ public class Bluetooth {
         return bluetoothService;
     }
 
-    public BluetoothGatt getBluetoothGatt() {
+    public BluetoothGatt getGatt() {
         return bluetoothService.getGatt();
+    }
+
+    public List<BluetoothDevice> getConnectedDevices() {
+        if (bluetoothService == null || getGatt() == null) {
+            return null;
+        }
+        return getGatt().getConnectedDevices();
     }
 
     public void connect(ScanResult scanResult, Boolean cancel, Boolean autoConnect) {
