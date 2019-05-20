@@ -28,6 +28,8 @@ import android.app.Application;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothManager;
+import android.bluetooth.BluetoothProfile;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -35,6 +37,7 @@ import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.IBinder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import trujillo.david.bluetoothle.exceptions.BleException;
@@ -65,6 +68,22 @@ public class Bluetooth {
     private Application application;
     private ReaderManager readerManager;
 
+    public Bluetooth(Application application, Boolean disconnect, String service, String notify, String read, String write) {
+        this.uuidNotify = notify;
+        this.uuidRead = read;
+        this.uuidService = service;
+        this.uuidWrite = write;
+        this.application = application;
+
+        if (disconnect) {
+            disconnect();
+        }
+
+        if (bluetoothService == null) {
+            bindService();
+        }
+    }
+
     public Bluetooth(Application application, Boolean disconnect) {
         this.application = application;
 
@@ -79,29 +98,6 @@ public class Bluetooth {
 
     public void setReaderManager(ReaderManager readerManager) {
         this.readerManager = readerManager;
-    }
-
-    public void setUuid(String uuidNotify, String uuidRead, String uuidService, String uuidWrite){
-        this.uuidNotify = uuidNotify;
-        this.uuidRead = uuidRead;
-        this.uuidService = uuidService;
-        this.uuidWrite = uuidWrite;
-    }
-
-    public void setUuidNotify(String uuidNotify) {
-        this.uuidNotify = uuidNotify;
-    }
-
-    public void setUuidRead(String uuidRead) {
-        this.uuidRead = uuidRead;
-    }
-
-    public void setUuidService(String uuidService) {
-        this.uuidService = uuidService;
-    }
-
-    public void setUuidWrite(String uuidWrite) {
-        this.uuidWrite = uuidWrite;
     }
 
     public void setDelayConnection(int delayConnection) {
@@ -154,11 +150,28 @@ public class Bluetooth {
         return bluetoothService.getGatt();
     }
 
+
+    public BluetoothManager getBluetoothManager() {
+        return (BluetoothManager) this.application.getSystemService(Context.BLUETOOTH_SERVICE);
+    }
+
     public List<BluetoothDevice> getConnectedDevices() {
-        if (bluetoothService == null || getGatt() == null) {
-            return null;
+        BluetoothManager bluetoothManager = getBluetoothManager();
+        if (bluetoothService == null || getGatt() == null || bluetoothManager == null) {
+            return new ArrayList<>();
         }
-        return getGatt().getConnectedDevices();
+        return getBluetoothManager().getConnectedDevices(BluetoothProfile.GATT);
+    }
+
+    public Boolean isDeviceConnected(String name) {
+        List<BluetoothDevice> devicesConnected = getConnectedDevices();
+        for (BluetoothDevice device : devicesConnected) {
+            String deviceName = device.getName();
+            if (deviceName != null && deviceName.equals(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void connect(ScanResult scanResult, Boolean cancel, Boolean autoConnect) {
